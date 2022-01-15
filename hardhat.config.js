@@ -8,7 +8,7 @@ require("@nomiclabs/hardhat-etherscan");
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-const {ETHERSCAN_API, GOERLI_API_URL, MAIN_API_URL, API_URL, METAMASK_PRIVATE_KEY, COIN_API} = process.env;
+const {ETHERSCAN_API, MUMBAI_API_URL, GOERLI_API_URL, MAIN_API_URL, API_URL, METAMASK_PRIVATE_KEY, COIN_API} = process.env;
 
 let accounts = [];
 accounts = [`0x${METAMASK_PRIVATE_KEY}`]
@@ -38,7 +38,7 @@ module.exports = {
       accounts,
     },
     mumbai: {
-      url: process.env.MUMBAI_RPC || "https://rpc-mumbai.maticvigil.com",
+      url: MUMBAI_API_URL || "https://rpc-mumbai.maticvigil.com",
       accounts,
     },
   },
