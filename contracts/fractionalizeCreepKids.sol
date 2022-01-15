@@ -129,7 +129,7 @@ contract fractionalizeCreepKids {
             "ERROR: TokenID not found in CoinHolder.TokenIDsHeld");
 
         coinHolderToCheck.TokenIDsHeld[removalIndex] = coinHolderToCheck.TokenIDsHeld[coinHolderToCheck.TokenIDsHeld.length - 1];
-        coinHolderToCheck.TokenIDsHeld[coinHolderToCheck.TokenIDsHeld.length - 1] = 0;
+        coinHolderToCheck.TokenIDsHeld.pop();
     }
 
     function transferCreepCoinsToAddress(
