@@ -35,15 +35,11 @@ contract fractionalizeCreepKids {
     }
 
     function _checkValidTokenIDAndOwnershipAndNotYetMinted (
-        address addressToCheck,
         uint TokenID
     ) private view {
         require(_checkValidTokenID(TokenID),
             "ERROR: TokenID invalid.");
-        //  Check if the address given actually owns the TokenID given
-        //  TODO: Perhaps call CreepKids's ownerOf(function)? Lucas likely to implement the Bridge
-        require(true,
-            "ERROR: Address given does not own TokenID NFT.");
+
         //  Check if the TokenID's CreepCoins have already been minted
         //  use TokenIDtoAreFractionalizedCoinsMinted
         require(!TokenIDtoAreFractionalizedCoinsMinted[TokenID],
@@ -54,7 +50,7 @@ contract fractionalizeCreepKids {
         address addressOfHolder,
         uint TokenID
     ) private {
-        _checkValidTokenIDAndOwnershipAndNotYetMinted(addressOfHolder, TokenID);
+        _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  DO NOT check if the TokenID already has an authorized minter address
         //  consider the following case:
@@ -76,12 +72,9 @@ contract fractionalizeCreepKids {
         if (addressToCoinHolder[addressOfCoinHolder].initialized) {
             return addressToCoinHolder[addressOfCoinHolder];
         } else {
-            mapping(uint=>uint) storage TokenIDtoCoinCount;
-            uint[] storage TokenIDsHeld;
-            bool initialized;
-
-            addressToCoinHolder[addressOfCoinHolder] = CoinHolder({intialized:true});
-            return addressToCoinHolder[addressOfCoinHolder];
+            CoinHolder storage returnCoinHolder = addressToCoinHolder[addressOfCoinHolder];
+            returnCoinHolder.initialized = true;
+            return returnCoinHolder;
         }
     }
 
@@ -89,7 +82,7 @@ contract fractionalizeCreepKids {
         address addressOfHolder,
         uint TokenID
     ) private {
-        _checkValidTokenIDAndOwnershipAndNotYetMinted(addressOfHolder, TokenID);
+        _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  Check for minting authorization in TokenIDToAuthorizedMinterAddress
         require(TokenIDToAuthorizedMinterAddress[TokenID] == addressOfHolder,
