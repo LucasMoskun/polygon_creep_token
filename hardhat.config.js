@@ -8,15 +8,15 @@ require("@nomiclabs/hardhat-etherscan");
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-let accounts = [];
+const {ETHERSCAN_API, MAIN_API_URL, API_URL, METAMASK_PRIVATE_KEY, COIN_API} = process.env;
 
-if (process.env.PRIVATE_KEY) {
-  accounts = [`0x${process.env.PRIVATE_KEY}`, ...accounts];
-}
+let accounts = [];
+accounts = [`0x${METAMASK_PRIVATE_KEY}`]
 
 module.exports = {
   solidity: {
     version: "0.8.0",
+    defaultNetwork: "hardhat",
     settings: {
       optimizer: {
         enabled: true,
@@ -43,6 +43,12 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY || "",
   },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
+  }
 };
