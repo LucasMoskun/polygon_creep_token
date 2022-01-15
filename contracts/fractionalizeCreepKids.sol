@@ -26,6 +26,7 @@ contract fractionalizeCreepKids {
 
     constructor () {
         CreepKidsNFTSmartContractAddress = 0x7ef232E01C45377b0321ff11cA50c59C5B69212b;
+        metadataUri = "ipfs://QmcrVNTcC9DTGia2YbdrYchzt26te94DkEGikPNd3q1Ug3";
     }
 
     function _checkValidTokenID (
@@ -217,6 +218,8 @@ contract fractionalizeCreepKids {
         address addressToCheckBalance,
         uint TokenID
     ) public view returns(uint) {
+        require(addressToCoinHolder[addressToCheckBalance].initialized,
+            "ERROR: Given Address has not initialized its CoinHolder");
         return addressToCoinHolder[addressToCheckBalance].TokenIDtoCoinCount[TokenID];
     }
 
@@ -232,3 +235,12 @@ contract fractionalizeCreepKids {
         return returnSum;
     }
 }
+
+/**
+TODO:
+- Install Node/npm
+- Install Truffle
+- Install Hardhat
+- Find working Goerli and Mumbai faucets
+- Deploy smart contracts to Goerli and Mumbai
+ */
