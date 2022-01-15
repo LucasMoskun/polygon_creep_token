@@ -111,20 +111,32 @@ contract fractionalizeCreepKids {
             "ERROR: Expected Coin Count does not match actual Coin Count.");
     }
 
+    function _findIndexOfValueInArray(
+        uint searchValue,
+        uint[] storage searchArray
+    ) private returns (uint, bool) {
+        uint foundIndex;
+        bool found;
+        uint i;
+        for (i=0; i < searchArray.length; i++) {
+            if (searchValue == searchArray[i]) {
+                foundIndex = i;
+                found = true;
+                break;
+            }
+        }
+        return (foundIndex, found);
+    }
+
     function _removeTokenIDfromCoinHolder(
         CoinHolder storage coinHolderToCheck,
         uint TokenID
     ) private {
         uint removalIndex;
         bool found;
-        uint i;
-        for (i=0; i < coinHolderToCheck.TokenIDsHeld.length; i++) {
-            if (TokenID == coinHolderToCheck.TokenIDsHeld[i]) {
-                removalIndex = i;
-                found = true;
-                break;
-            }
-        }
+        
+        (removalIndex, found) = _findIndexOfValueInArray(TokenID, coinHolderToCheck.TokenIDsHeld);
+
         require(!found,
             "ERROR: TokenID not found in CoinHolder.TokenIDsHeld");
 
@@ -169,6 +181,7 @@ contract fractionalizeCreepKids {
         }
 
         //Add TokenID to TokenIDs list in receiverCoinHolder IF NOT ALREADY THERE (see original quantity of receiver)
+
 
         //Increment receiverCoinHolder => TokenID => Count by AmountCoinToSend
 
