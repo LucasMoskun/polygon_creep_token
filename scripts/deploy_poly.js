@@ -23,10 +23,9 @@ async function main() {
     return;
   }
 
-
   const owner = await ethers.getSigner(0);
   console.log("Getting ABI");
-  const abi = await ethers.getContractFactory("FxStateChildTunnel");
+  const abi = await ethers.getContractFactory("CreepCoin");
   console.log("Deploying contract");
   const contract = await abi.deploy(fxChild);
 
