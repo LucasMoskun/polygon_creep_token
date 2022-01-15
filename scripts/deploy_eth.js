@@ -29,7 +29,7 @@ async function main() {
 
   const owner = await ethers.getSigner(0);
   console.log("Getting ABI");
-  const abi = await ethers.getContractFactory("FxStateRootTunnel");
+  const abi = await ethers.getContractFactory("AuthorizeCreepCoin");
   console.log("Deploying contract");
   const contract = await abi.deploy(checkpointManager, fxRoot);
 
