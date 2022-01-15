@@ -204,13 +204,13 @@ contract fractionalizeCreepKids {
         if (senderOriginalCoinCount - AmountCoinToSend == 0) {
             (, found) = _findIndexOfValueInArray(TokenID, senderCoinHolder.TokenIDsHeld);
             require(!found,
-                "ERROR: TokenID was not removed from sender's CoinHolder.TokenIDsHeld");
+                "ERROR: TokenID was not removed from sender's CoinHolder.TokenIDsHeld.");
         }
 
         //Assert receiverCoinHolder has TokenID
         (, found) = _findIndexOfValueInArray(TokenID, receiverCoinHolder.TokenIDsHeld);
         require(found,
-            "ERROR: TokenID was not added to receiver's CoinHolder.TokenIDsHeld");
+            "ERROR: TokenID was not added to receiver's CoinHolder.TokenIDsHeld.");
     }
 
     function balance(
