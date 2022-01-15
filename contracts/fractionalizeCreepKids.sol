@@ -114,7 +114,7 @@ contract fractionalizeCreepKids {
     function _findIndexOfValueInArray(
         uint searchValue,
         uint[] storage searchArray
-    ) private returns (uint, bool) {
+    ) private view returns (uint, bool) {
         uint foundIndex;
         bool found;
         uint i;
@@ -181,15 +181,33 @@ contract fractionalizeCreepKids {
         }
 
         //Add TokenID to TokenIDs list in receiverCoinHolder IF NOT ALREADY THERE (see original quantity of receiver)
-
+        (, bool found) = _findIndexOfValueInArray(TokenID, receiverCoinHolder.TokenIDsHeld);
+        if (!found) {
+            receiverCoinHolder.TokenIDsHeld.push(TokenID);
+        }
 
         //Increment receiverCoinHolder => TokenID => Count by AmountCoinToSend
+        receiverCoinHolder.TokenIDtoCoinCount[TokenID] += AmountCoinToSend;
 
         //Assert receiverCoinHolder holds the TokenID and has original quantity + sent quantity, if not revert
+        require(receiverCoinHolder.TokenIDtoCoinCount[TokenID] == receiverOriginalCoinCount + AmountCoinToSend, 
+            "ERROR: receiver's new balance different than expected.");
 
-        //Assert senderCoinHolder holds the TokenID and has original quantity - sent quantity,
-        //  OR does not hold TokenID if quant = 0 if not revert
+        //Assert senderCoinHolder has original quantity - sent quantity
+        require(senderCoinHolder.TokenIDtoCoinCount[TokenID] == senderOriginalCoinCount - AmountCoinToSend, 
+            "ERROR: sender's new balance different than expected.");
 
+        //Assert senderCoinHolder has TokenID if non-zero CreepCoin remaining
+        if (senderOriginalCoinCount - AmountCoinToSend == 0) {
+            (, found) = _findIndexOfValueInArray(TokenID, senderCoinHolder.TokenIDsHeld);
+            require(!found,
+                "ERROR: TokenID was not removed from sender's CoinHolder.TokenIDsHeld");
+        }
+
+        //Assert receiverCoinHolder has TokenID
+        (, found) = _findIndexOfValueInArray(TokenID, receiverCoinHolder.TokenIDsHeld);
+        require(found,
+            "ERROR: TokenID was not added to receiver's CoinHolder.TokenIDsHeld");
     }
 
     function balance(
