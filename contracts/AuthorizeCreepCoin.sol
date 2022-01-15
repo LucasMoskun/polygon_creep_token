@@ -22,7 +22,7 @@ contract AuthorizeCreepCoin is FxBaseRootTunnel {
     function AuthorizeCreepCoinBridge(uint tokenId, uint suffixId, address walletAddress)
     public
     {
-        sendMessageToChild(encodeTokerIdAndWalletAddress(tokenId, suffixId, walletAddress));
+        sendMessageToChild(encodeTokenIdAndWalletAddress(tokenId, suffixId, walletAddress));
     }
 
     function encodeTokenIdAndWalletAddress(uint tokenId, uint suffixId, address walletAddress)
