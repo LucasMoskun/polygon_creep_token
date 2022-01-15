@@ -31,7 +31,7 @@ contract fractionalizeCreepKids {
     function _checkValidTokenID (
         uint TokenID
     ) private pure returns (bool) {
-        return TokenID > 0 && TokenID <= 1000;
+        return TokenID >= 0 && TokenID <= 1000;
     }
 
     function _checkValidTokenIDAndOwnershipAndNotYetMinted (
@@ -96,9 +96,10 @@ contract fractionalizeCreepKids {
         //          1. Add TokenID to the TokenIDsHeld
         mintersCoinHolder.TokenIDsHeld.push(TokenID);
         //          2. Add mapping of TokenID => 100 in TokenIDtoCoinCount       
+        mintersCoinHolder.TokenIDtoCoinCount[TokenID] = 100;
 
         //  Mark the TokenID as minted in TokenIDtoAreFractionalizedCoinsMinted
-        //      If fails, we must revert
+        TokenIDtoAreFractionalizedCoinsMinted[TokenID] = true;
     }
 
     function _checkCoinHolderHasExactlyCountOfTokenIDCoins(
@@ -110,33 +111,66 @@ contract fractionalizeCreepKids {
             "ERROR: Expected Coin Count does not match actual Coin Count.");
     }
 
+    function _removeTokenIDfromCoinHolder(
+        CoinHolder storage coinHolderToCheck,
+        uint TokenID
+    ) private {
+        uint removalIndex;
+        bool found;
+        uint i;
+        for (i=0; i < coinHolderToCheck.TokenIDsHeld.length; i++) {
+            if (TokenID == coinHolderToCheck.TokenIDsHeld[i]) {
+                removalIndex = i;
+                found = true;
+                break;
+            }
+        }
+        require(!found,
+            "ERROR: TokenID not found in CoinHolder.TokenIDsHeld");
+
+        coinHolderToCheck.TokenIDsHeld[removalIndex] = coinHolderToCheck.TokenIDsHeld[coinHolderToCheck.TokenIDsHeld.length - 1];
+        coinHolderToCheck.TokenIDsHeld[coinHolderToCheck.TokenIDsHeld.length - 1] = 0;
+    }
+
     function transferCreepCoinsToAddress(
         address addressOfSender,
         address addressOfReceiver,
         uint TokenID,
-        uint CreepCoinCount
+        uint AmountCoinToSend
     ) public {
-        //Check token with _checkTokenID
+        _checkValidTokenID(TokenID);
 
         //_lookupOrCreateCoinHolder to get senderCoinHolder object
+        CoinHolder storage senderCoinHolder = _lookupOrCreateCoinHolder(addressOfSender);
 
         //_lookupOrCreateCoinHolder to get receiverCoinHolder object
+        CoinHolder storage receiverCoinHolder = _lookupOrCreateCoinHolder(addressOfReceiver);
 
-        //Check CreepCoinCount >0 and <= 100
+        //Check AmountCoinToSend >0 and <= 100
+        require(AmountCoinToSend > 0 && AmountCoinToSend <= 100,
+            "ERROR: Transfer amount must be 1-100.");
 
         //Check senderCoinHolder holds the TokenID and has sufficient quantity
+        require(senderCoinHolder.TokenIDtoCoinCount[TokenID] >= AmountCoinToSend,
+            "ERROR: Sender did not have enough CreepCoin for this transfer.");
 
         //Save original quantity of receiverCoinHolder => TokenID => Count
+        uint receiverOriginalCoinCount = receiverCoinHolder.TokenIDtoCoinCount[TokenID];
 
         //Save original quantity of senderCoinHolder => TokenID => Count
+        uint senderOriginalCoinCount = senderCoinHolder.TokenIDtoCoinCount[TokenID];
 
-        //Decrement senderCoinHolder => TokenID => Count by CreepCoinCount
+        //Decrement senderCoinHolder => TokenID => Count by AmountCoinToSend
+        senderCoinHolder.TokenIDtoCoinCount[TokenID] -= AmountCoinToSend;
 
-        //If address => 0, remove TokenID from TokenIDs list in senderCoinHolder
+        //If sender runs out of that TokenID coins, remove TokenID from TokenIDs list in senderCoinHolder
+        if (AmountCoinToSend == senderOriginalCoinCount) {
+            _removeTokenIDfromCoinHolder(senderCoinHolder, TokenID);
+        }
 
         //Add TokenID to TokenIDs list in receiverCoinHolder IF NOT ALREADY THERE (see original quantity of receiver)
 
-        //Increment receiverCoinHolder => TokenID => Count by CreepCoinCount
+        //Increment receiverCoinHolder => TokenID => Count by AmountCoinToSend
 
         //Assert receiverCoinHolder holds the TokenID and has original quantity + sent quantity, if not revert
 
