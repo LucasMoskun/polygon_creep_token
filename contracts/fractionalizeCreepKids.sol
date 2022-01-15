@@ -20,9 +20,9 @@ contract fractionalizeCreepKids {
 
     string metadataUri;
     address CreepKidsNFTSmartContractAddress;
-    mapping(address=>CoinHolder) addressToCoinHolder;
-    mapping(uint=>address) TokenIDToAuthorizedMinterAddress;
-    mapping(uint=>bool) TokenIDtoAreFractionalizedCoinsMinted;
+    mapping(address=>CoinHolder) public addressToCoinHolder;
+    mapping(uint=>address) public TokenIDToAuthorizedMinterAddress;
+    mapping(uint=>bool) public TokenIDtoAreFractionalizedCoinsMinted;
 
     constructor () {
         CreepKidsNFTSmartContractAddress = 0x7ef232E01C45377b0321ff11cA50c59C5B69212b;
@@ -49,7 +49,7 @@ contract fractionalizeCreepKids {
     function authorizeAddressToMintTokenID(
         address addressOfHolder,
         uint TokenID
-    ) private {
+    ) public {
         _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  DO NOT check if the TokenID already has an authorized minter address
@@ -81,7 +81,7 @@ contract fractionalizeCreepKids {
     function mintCreepCoins(
         address addressOfHolder,
         uint TokenID
-    ) private {
+    ) public {
         _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  Check for minting authorization in TokenIDToAuthorizedMinterAddress
@@ -150,6 +150,9 @@ contract fractionalizeCreepKids {
         uint TokenID,
         uint AmountCoinToSend
     ) public {
+        require(addressOfSender != addressOfReceiver,
+            "ERROR: Sender and receiver must be different addresses.");
+
         _checkValidTokenID(TokenID);
 
         //_lookupOrCreateCoinHolder to get senderCoinHolder object
@@ -215,5 +218,17 @@ contract fractionalizeCreepKids {
         uint TokenID
     ) public view returns(uint) {
         return addressToCoinHolder[addressToCheckBalance].TokenIDtoCoinCount[TokenID];
+    }
+
+    function totalBalance(
+        address addressToCheckBalance
+    ) public view returns(uint) {
+        uint[] storage TokenIDs = addressToCoinHolder[addressToCheckBalance].TokenIDsHeld;
+        uint i;
+        uint returnSum;
+        for (i=0; i<TokenIDs.length; i++) {
+            returnSum += addressToCoinHolder[addressToCheckBalance].TokenIDtoCoinCount[TokenIDs[i]];
+        }
+        return returnSum;
     }
 }
