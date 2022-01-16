@@ -76,8 +76,6 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
     }
 
     function getURI(uint TokenID) public view returns (string memory) {
-        require(TokenIDToURISuffix[TokenID] != 0,
-            "ERROR: URI Suffix not found for given TokenID");
         return string(abi.encodePacked(METADATA_URI, "/", _uintToString(TokenIDToURISuffix[TokenID])));
     }
 
@@ -115,10 +113,6 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
         //      address 0x2 authorizes TokenID 5 for CreepCoinMinting
         //          we WANT to overwrite mapping in TokenIDToAuthorizedMinterAddress: 5=>0x2
         //
-
-        //@Khalid 0 is a valid suffix id, so I've commented this out. Will this break anything?
-        //require(URISuffixID != 0,
-        //    "ERROR: Cannot authorize mint with URI Suffix = 0");
 
         //Map given TokenID to given Address
         TokenIDToAuthorizedMinterAddress[TokenID] = addressOfHolder;
