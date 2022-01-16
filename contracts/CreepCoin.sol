@@ -8,6 +8,8 @@ import {FxBaseChildTunnel} from "./tunnel/FxBaseChildTunnel.sol";
 contract CreepCoin is ERC1155, FxBaseChildTunnel {
     string constant METADATA_URI = "ipfs://QmcrVNTcC9DTGia2YbdrYchzt26te94DkEGikPNd3q1Ug3";
     uint constant QUANTITY_TO_MINT = 100;
+    string public constant name = "Creep Coin";
+    string public constant symbol = "CCT";
 
     mapping(uint=>address) public TokenIDToAuthorizedMinterAddress;
     mapping(uint=>uint) public TokenIDToURISuffix;
