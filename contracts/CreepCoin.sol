@@ -20,7 +20,7 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
     address public latestRootMessageSender;
     bytes public latestData;
 
-    constructor(address _fxChild) FxBaseChildTunnel(_fxChild) ERC1155("creepkids.io"){}
+    constructor(address _fxChild) FxBaseChildTunnel(_fxChild) ERC1155("ipfs://bafybeigwsznwobjfnt3katyfdliynhcb6fdi7e72rvlfe7y4gln5z5abdm"){}
 
     function sendMessageToRoot(bytes memory message) internal {
         _sendMessageToRoot(message);
