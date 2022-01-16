@@ -16,17 +16,13 @@ describe("Test Decode poly", function() {
     await contract.connect(owner.address);
 
 
-    const rootAddress = "0x672C4838c6642e7125d9F0024b38F033238C0Ddd";
-    const setRoot = await contract.setFxRootTunnel(rootAddress);
-    console.log("setRoot: ", setRoot);
-    //console.log("Reading");
+   // const rootAddress = "0x672C4838c6642e7125d9F0024b38F033238C0Ddd";
+   // const setRoot = await contract.setFxRootTunnel(rootAddress);
+   // console.log("setRoot: ", setRoot);
 
-    //const hello = await contract.greet();
-    //console.log("hello: ", hello)
-    //const mint = await contract.mintCreepCoins(1);
-    //console.log("testReturn: ", mint)
-    //const testTokenId = await contract.testReturnTokenId();
-    //console.log("testTokenId: ", testTokenId)
+      console.log("Minting...");
+    const mint = await contract.mintCreepCoins(4);
+    console.log("mint: ", mint)
 
 
   })
