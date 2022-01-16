@@ -10,7 +10,7 @@ describe("Test Encode Eth", function() {
     const abi = await ethers.getContractFactory("AuthorizeCreepCoin");
     console.log("Connecting to contract");
 
-    const contractAddress = "0x03AfA5dA0ebf80f679Dc20810F719a6d088A0E30";
+    const contractAddress = "0xb6B48BD8A6cD1267bACF04A1b002335030EA3D6F";
     const contract = await abi.attach(contractAddress);
     await contract.connect(owner.address);
 
@@ -21,8 +21,10 @@ describe("Test Encode Eth", function() {
 
     //const queryURI = await contract.queryURI("YOOO");
 
-    const storedURI = await contract.getStoredURI();
-    console.log("Stored URI: ", storedURI);
+    //const storedURI = await contract.getStoredURI();
+    //console.log("Stored URI: ", storedURI);
+    const ownerOf = await contract.queryOwner(1);
+    console.log("owner of", ownerOf);
     //const authTx = await contract.AuthorizeCreepCoinBridge(3,4, owner.address);
 
     console.log("Finished");

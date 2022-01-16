@@ -31,6 +31,11 @@ contract AuthorizeCreepCoin is FxBaseRootTunnel {
         testURI = ckNFT.tokenURI(1);
     }
 
+    function queryOwner(uint tokenId) public view returns (address) {
+        ERC721 ckNFT = ERC721(CKNFT_ADDRESS);
+        return ckNFT.ownerOf(tokenId);
+    }
+
     function _processMessageFromChild(bytes memory data) internal override {
         latestData = data;
     }
