@@ -15,7 +15,11 @@ describe("Test Decode poly", function() {
     const contract = await abi.attach(contractAddress);
     await contract.connect(owner.address);
 
-    console.log("Reading");
+
+    //  const rootAddress = "0xb205E9533605A8c3d2bAfA40037B05D3Ed87DF7d";
+    //  const setRoot = await contract.setFxRootTunnel(rootAddress);
+    //  console.log("setRoot: ", setRoot);
+    //  console.log("Reading");
     const hello = await contract.greet();
     console.log("hello: ", hello)
     const testReturn = await contract.testReturn();

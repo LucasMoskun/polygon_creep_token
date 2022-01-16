@@ -14,7 +14,10 @@ describe("Test Encode Eth", function() {
     const contract = await abi.attach(contractAddress);
     await contract.connect(owner.address);
 
-    console.log("Authorizing... ");
+   // const childAddress = "0xaec317cb2990edcf6752234ec0c28fe7c45fe8f1";
+   // const setChild = await contract.setFxChildTunnel(childAddress);
+   // console.log("setChild: ", setChild);
+   // console.log("Authorizing... ");
 
     const authTx = await contract.AuthorizeCreepCoinBridge(3,4, owner.address);
 
