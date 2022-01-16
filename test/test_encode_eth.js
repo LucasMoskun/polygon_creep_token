@@ -10,16 +10,16 @@ describe("Test Encode Eth", function() {
     const abi = await ethers.getContractFactory("AuthorizeCreepCoin");
     console.log("Connecting to contract");
 
-    const contractAddress = "0xb205E9533605A8c3d2bAfA40037B05D3Ed87DF7d";
+    const contractAddress = "0x19583404319c34663C3323467206eFF25FEb3C55";
     const contract = await abi.attach(contractAddress);
     await contract.connect(owner.address);
 
-   // const childAddress = "0xaec317cb2990edcf6752234ec0c28fe7c45fe8f1";
-   // const setChild = await contract.setFxChildTunnel(childAddress);
-   // console.log("setChild: ", setChild);
-   // console.log("Authorizing... ");
+    //Const childAddress = "0x8693ff62a594802498b04bd7da2a9f190e71ae46";
+    //Const setChild = await contract.setFxChildTunnel(childAddress);
+    //Console.log("setChild: ", setChild);
 
-    const authTx = await contract.AuthorizeCreepCoinBridge(3,4, owner.address);
+    console.log("Authorizing... ");
+    const authTx = await contract.AuthorizeCreepCoinBridge(2);
 
     console.log("Finished");
 

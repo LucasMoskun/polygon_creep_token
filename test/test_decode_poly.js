@@ -11,21 +11,22 @@ describe("Test Decode poly", function() {
     const abi = await ethers.getContractFactory("CreepCoin");
     console.log("Connecting to contract");
 
-    const contractAddress = "0xaec317cb2990edcf6752234ec0c28fe7c45fe8f1";
+    const contractAddress = "0x8693ff62a594802498b04bd7da2a9f190e71ae46";
     const contract = await abi.attach(contractAddress);
     await contract.connect(owner.address);
 
 
-    //  const rootAddress = "0xb205E9533605A8c3d2bAfA40037B05D3Ed87DF7d";
-    //  const setRoot = await contract.setFxRootTunnel(rootAddress);
-    //  console.log("setRoot: ", setRoot);
-    //  console.log("Reading");
-    const hello = await contract.greet();
-    console.log("hello: ", hello)
-    const testReturn = await contract.testReturn();
-    console.log("testReturn: ", testReturn)
-    const testTokenId = await contract.testReturnTokenId();
-    console.log("testTokenId: ", testTokenId)
+    //const rootAddress = "0x19583404319c34663C3323467206eFF25FEb3C55";
+    //const setRoot = await contract.setFxRootTunnel(rootAddress);
+    //console.log("setRoot: ", setRoot);
+    //console.log("Reading");
+
+    //const hello = await contract.greet();
+    //console.log("hello: ", hello)
+    const mint = await contract.mintCreepCoins(1);
+    console.log("testReturn: ", mint)
+    //const testTokenId = await contract.testReturnTokenId();
+    //console.log("testTokenId: ", testTokenId)
 
 
   })
