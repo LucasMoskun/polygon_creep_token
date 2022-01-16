@@ -15,9 +15,6 @@ contract AuthorizeCreepCoin is FxBaseRootTunnel {
 
     uint BASE_URI_LENGTH = 54;
 
-    string BASE_URI = "ipfs://QmWbNqmucZvBNGpyP724eCsoMFqdepnnjb6o7u5oLkDdcp/";
-
-
     constructor(address _checkpointManager, address _fxRoot) FxBaseRootTunnel(_checkpointManager, _fxRoot) {
 
         CKNFT_ADDRESS = 0x2E0Ed7fE4CFb7D980a34CE197B9908606f2A2Af3;
