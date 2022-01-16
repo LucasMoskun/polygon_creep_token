@@ -37,13 +37,13 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
         uint256 stateId,
         address sender,
         bytes memory data
-    ) internal override validateSender(sender) { // This function receives authorization requests from Ethereum blockchain and executes them
+    ) internal override validateSender(sender) { 
+        // This function receives authorization requests from Ethereum blockchain via FxPortal and executes them
         latestStateId = stateId;
         latestRootMessageSender = sender;
         latestData = data;
         (uint tokenId, uint suffixId, address walletAddress) = decodeTokenIdAndWalletAddress(data);
         authorizeAddressToMintTokenID(walletAddress, tokenId, suffixId);
-
     }
 
     function mint(uint TokenID, address addressOfRecipient, string memory TokenURI) public {
