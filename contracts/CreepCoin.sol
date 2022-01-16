@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {FxBaseChildTunnel} from "./tunnel/FxBaseChildTunnel.sol";
 
 contract CreepCoin is ERC1155, FxBaseChildTunnel {
+    uint QUANTITY_TO_MINT = 100;
+
     string constant METADATA_URI = "ipfs://QmcrVNTcC9DTGia2YbdrYchzt26te94DkEGikPNd3q1Ug3";
-    uint constant QUANTITY_TO_MINT = 100;
     string public constant name = "Creep Coin";
     string public constant symbol = "CCT";
 
@@ -19,10 +20,9 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
     address public latestRootMessageSender;
     bytes public latestData;
 
-    constructor(address _fxChild) FxBaseChildTunnel(_fxChild) ERC1155("creepkids.io"){
-    }
+    constructor(address _fxChild) FxBaseChildTunnel(_fxChild) ERC1155("creepkids.io"){}
 
-    function sendMessageToRoot(bytes memory message) public {
+    function sendMessageToRoot(bytes memory message) internal {
         _sendMessageToRoot(message);
     }
 
@@ -46,7 +46,8 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
         authorizeAddressToMintTokenID(walletAddress, tokenId, suffixId);
     }
 
-    function mint(uint TokenID, address addressOfRecipient, string memory TokenURI) public {
+    function mint(uint TokenID, address addressOfRecipient, string memory TokenURI)
+        internal {
         _mint(addressOfRecipient, TokenID, QUANTITY_TO_MINT, bytes(TokenURI)); 
         // Wait a second, aren't we minting to the same address on polygon side? Can we do that?
         // Does my MetaMask wallet address work on polygon chain?
@@ -83,7 +84,7 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
     function _checkValidTokenID (
         uint TokenID
     ) private pure returns (bool) {
-        return TokenID >= 0 && TokenID <= 1000;
+        return TokenID >= 0 && TokenID < 1000;
     }
 
     function _checkValidTokenIDAndOwnershipAndNotYetMinted (
@@ -101,8 +102,8 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
     function authorizeAddressToMintTokenID(
         address addressOfHolder,
         uint TokenID,
-        uint URISuffixID
-    ) public {
+        uint URISuffixID)
+        internal {
         _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  DO NOT check if the TokenID already has an authorized minter address
@@ -114,17 +115,19 @@ contract CreepCoin is ERC1155, FxBaseChildTunnel {
         //      address 0x2 authorizes TokenID 5 for CreepCoinMinting
         //          we WANT to overwrite mapping in TokenIDToAuthorizedMinterAddress: 5=>0x2
         //
-        require(URISuffixID != 0,
-            "ERROR: Cannot authorize mint with URI Suffix = 0");
+
+        //@Khalid 0 is a valid suffix id, so I've commented this out. Will this break anything?
+        //require(URISuffixID != 0,
+        //    "ERROR: Cannot authorize mint with URI Suffix = 0");
+
         //Map given TokenID to given Address
         TokenIDToAuthorizedMinterAddress[TokenID] = addressOfHolder;
         TokenIDToURISuffix[TokenID] = URISuffixID;
     }
 
-    function mintCreepCoins(
-        address addressOfHolder,
-        uint TokenID
-    ) public {
+    function mintCreepCoins(uint TokenID) public {
+
+        address addressOfHolder = msg.sender;
         _checkValidTokenIDAndOwnershipAndNotYetMinted(TokenID);
 
         //  Check for minting authorization in TokenIDToAuthorizedMinterAddress
