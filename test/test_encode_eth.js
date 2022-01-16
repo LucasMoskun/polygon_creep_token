@@ -12,6 +12,7 @@ describe("Test Encode Eth", function() {
 
     const contractAddress = "0xb205E9533605A8c3d2bAfA40037B05D3Ed87DF7d";
     const contract = await abi.attach(contractAddress);
+    await contract.connect(owner.address);
 
     console.log("Authorizing... ");
 

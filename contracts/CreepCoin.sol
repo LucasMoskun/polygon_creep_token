@@ -32,6 +32,18 @@ contract CreepCoin is FxBaseChildTunnel {
         _sendMessageToRoot(message);
     }
 
+    function testReturnTokenId() public view returns(uint){
+        return tokenId;
+    }
+
+    function testReturn() public pure returns(uint) {
+        return 5;
+    }
+
+    function greet() public view returns (string memory) {
+        return "hello world";
+    }
+
     function decodeTokenIdAndWalletAddress(bytes memory data)
     internal
     pure
